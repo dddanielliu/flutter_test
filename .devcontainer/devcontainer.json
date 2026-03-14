@@ -1,0 +1,16 @@
+{
+  "name": "Flutter DevContainer",
+  "dockerComposeFile": "../docker-compose.dev.yml",
+  "service": "flutter",
+  "workspaceFolder": "/workspace",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "Dart-Code.flutter",
+        "Dart-Code.dart-code"
+      ]
+    }
+  },
+  "remoteUser": "root",
+  "postCreateCommand": "flutter doctor"
+}
