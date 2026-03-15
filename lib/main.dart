@@ -21,8 +21,21 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatelessWidget {
+class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
+
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  String text = "";
+
+  void changeText(String text) {
+    setState(() {
+      this.text = text;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,13 +44,19 @@ class MyHomePage extends StatelessWidget {
         title: Text("Hello World!"),
         backgroundColor: Theme.of(context).colorScheme.primary,
       ),
-      body: TextInputWidget(),
+      body: Column(
+        children: [
+          TextInputWidget(callback: changeText),
+          Text(text),
+        ],
+      ),
     );
   }
 }
 
 class TextInputWidget extends StatefulWidget {
-  const TextInputWidget({super.key});
+  final Function(String) callback;
+  const TextInputWidget({super.key, required this.callback});
 
   @override
   State<TextInputWidget> createState() => _TextInputWidgetState();
@@ -46,34 +65,31 @@ class TextInputWidget extends StatefulWidget {
 class _TextInputWidgetState extends State<TextInputWidget> {
   final controller = TextEditingController();
 
-  String text = "";
-
   @override
   void dispose() {
     super.dispose();
     controller.dispose();
   }
 
+  void click() {
+    widget.callback(controller.text);
+    controller.clear();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        TextField(
-          controller: controller,
-          decoration: InputDecoration(
-            prefix: Icon(Icons.message),
-            labelText: "Type a message:",
-          ),
-          onChanged: (text) => setState(() {
-            if (text == "Hello World!") {
-              controller.clear();
-              text = "";
-            }
-            this.text = text;
-          }),
+    return TextField(
+      controller: controller,
+      decoration: InputDecoration(
+        prefix: Icon(Icons.message),
+        labelText: "Type a message:",
+        suffixIcon: IconButton(
+          icon: Icon(Icons.send),
+          splashColor: Colors.blue,
+          tooltip: "Post message",
+          onPressed: click,
         ),
-        Text(text),
-      ],
+      ),
     );
   }
 }
