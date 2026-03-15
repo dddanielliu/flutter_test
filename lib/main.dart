@@ -4,6 +4,24 @@ void main() {
   runApp(const MyApp());
 }
 
+class Post {
+  String body;
+  String author;
+  int likes = 0;
+  bool userLiked = false;
+
+  Post(this.body, this.author);
+
+  void likePost() {
+    userLiked = !userLiked;
+    if (userLiked) {
+      likes += 1;
+    } else {
+      likes -= 1;
+    }
+  }
+}
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -29,11 +47,11 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String text = "";
+  List<Post> posts = [];
 
-  void changeText(String text) {
+  void newPost(String text) {
     setState(() {
-      this.text = text;
+      posts.add(Post(text, "Tim"));
     });
   }
 
@@ -46,8 +64,8 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Column(
         children: [
-          TextInputWidget(callback: changeText),
-          Text(text),
+          Expanded(child: PostList(listItems: posts)),
+          Expanded(child: TextInputWidget(callback: newPost)),
         ],
       ),
     );
@@ -90,6 +108,47 @@ class _TextInputWidgetState extends State<TextInputWidget> {
           onPressed: click,
         ),
       ),
+    );
+  }
+}
+
+class PostList extends StatefulWidget {
+  final List<Post> listItems;
+
+  const PostList({super.key, required this.listItems});
+
+  @override
+  State<PostList> createState() => _PostListState();
+}
+
+class _PostListState extends State<PostList> {
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: widget.listItems.length,
+      itemBuilder: (context, index) {
+        Post post = widget.listItems[index];
+        return Card(
+          child: Row(
+            children: [
+              Expanded(
+                child: ListTile(
+                  title: Text(post.body),
+                  subtitle: Text(post.author),
+                ),
+              ),
+              Row(
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.thumb_up),
+                    onPressed: post.likePost,
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
