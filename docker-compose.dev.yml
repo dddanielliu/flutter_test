@@ -12,21 +12,23 @@ services:
       - flutter-pub-cache:/root/.pub-cache
       - gradle-cache:/root/.gradle
     environment:
-      - DISPLAY=novnc:0.0
+      # - DISPLAY=novnc:0.0
+      # - ADB_SERVER_SOCKET=tcp:host.docker.internal:5037
+      # - VM_SERVICE_PORT=8181
     stdin_open: true
     tty: true
     command: sleep infinity
-  novnc:
-    image: theasp/novnc:latest
-    environment:
-      - DISPLAY_WIDTH=1600
-      - DISPLAY_HEIGHT=968
-      - DISPLAY_MODE=remote
-      - RUN_XTERM=no
-      - RUN_FLUXBOX=yes
-    ports:
-      - "8104:8080"
-    command: ["/bin/sh", "-c", "sed -i \"s/UI.initSetting('resize', 'off');/UI.initSetting('resize', 'scale');/\" /usr/share/novnc/app/ui.js && /app/entrypoint.sh"]
+  # novnc:
+  #   image: theasp/novnc:latest
+  #   environment:
+  #     - DISPLAY_WIDTH=1600
+  #     - DISPLAY_HEIGHT=968
+  #     - DISPLAY_MODE=remote
+  #     - RUN_XTERM=no
+  #     - RUN_FLUXBOX=yes
+  #   ports:
+  #     - "8104:8080"
+  #   command: ["/bin/sh", "-c", "sed -i \"s/UI.initSetting('resize', 'off');/UI.initSetting('resize', 'scale');/\" /usr/share/novnc/app/ui.js && /app/entrypoint.sh"]
 
 volumes:
   flutter-pub-cache:
