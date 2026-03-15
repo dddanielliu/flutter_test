@@ -13,8 +13,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: .fromSeed(seedColor: Colors.deepPurple),
-        visualDensity: .adaptivePlatformDensity,
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        appBarTheme: const AppBarTheme(centerTitle: true),
       ),
       home: const MyHomePage(),
     );
@@ -27,8 +27,53 @@ class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Hello World!")),
-      body: Text("Hello World!"),
+      appBar: AppBar(
+        title: Text("Hello World!"),
+        backgroundColor: Theme.of(context).colorScheme.primary,
+      ),
+      body: TextInputWidget(),
+    );
+  }
+}
+
+class TextInputWidget extends StatefulWidget {
+  const TextInputWidget({super.key});
+
+  @override
+  State<TextInputWidget> createState() => _TextInputWidgetState();
+}
+
+class _TextInputWidgetState extends State<TextInputWidget> {
+  final controller = TextEditingController();
+
+  String text = "";
+
+  @override
+  void dispose() {
+    super.dispose();
+    controller.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        TextField(
+          controller: controller,
+          decoration: InputDecoration(
+            prefix: Icon(Icons.message),
+            labelText: "Type a message:",
+          ),
+          onChanged: (text) => setState(() {
+            if (text == "Hello World!") {
+              controller.clear();
+              text = "";
+            }
+            this.text = text;
+          }),
+        ),
+        Text(text),
+      ],
     );
   }
 }
