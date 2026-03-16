@@ -11,10 +11,10 @@ services:
       - .:/workspace
       - flutter-pub-cache:/root/.pub-cache
       - gradle-cache:/root/.gradle
-    environment:
-      # - DISPLAY=novnc:0.0
-      # - ADB_SERVER_SOCKET=tcp:host.docker.internal:5037
-      # - VM_SERVICE_PORT=8181
+    # environment:
+    #   - DISPLAY=novnc:0.0
+    #   - ADB_SERVER_SOCKET=tcp:host.docker.internal:5037
+    #   - VM_SERVICE_PORT=8181
     stdin_open: true
     tty: true
     command: sleep infinity
